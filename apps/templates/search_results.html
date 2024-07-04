@@ -1,0 +1,115 @@
+<!-- templates/search_results.html -->
+
+{% extends "layouts/base.html" %}
+{% block title %} Search Results {% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+  <style>
+    .dataset-card {
+      margin-top: 20px;
+      border: 1px solid #dee2e6; /* Adjust border color as needed */
+      border-radius: 5px;
+    }
+    .dataset-card-header {
+      background-color: #f8f9fa; /* Adjust background color as needed */
+      padding: 10px;
+      border-bottom: 1px solid #dee2e6; /* Adjust border color as needed */
+      border-radius: 5px 5px 0 0;
+    }
+    .dataset-card-body {
+      padding: 20px;
+    }
+  </style>
+
+  <div class="content">
+    <div class="container mt-5">
+      <h1>Search Results ({{ total_results }} datasets found)</h1>
+
+      {% for dataset in datasets %}
+      <div class="card dataset-card">
+        <div class="card-header dataset-card-header" style="display: grid; grid-template-columns: 1fr auto;">
+          <h3 class="card-title">{{ dataset.title }}</h3>
+          {% if dataset.saved %}
+          <button type="button" class="btn btn-primary btn-sm save-button" data-dataset-id="{{ dataset.id }}"
+              data-dataset-title="{{ dataset.title }}" data-dataset-link="{{ dataset.metadata.source_link }}">
+              Saved
+          </button>
+          {% else %}
+          <button type="button" class="btn btn-primary btn-sm save-button" data-dataset-id="{{ dataset.id }}"
+              data-dataset-title="{{ dataset.title }}" data-dataset-link="{{ dataset.metadata.source_link }}">
+              Save
+          </button>
+          {% endif %}
+        </div>
+        <div class="card-body dataset-card-body">
+          <p class="card-text">Source Link:
+            <a href="{{ dataset.metadata.source_link }}">
+              Click to go to dataset
+            </a>
+          </p>
+          <p class="card-text">File Format: {{ dataset.file_format }}</p>
+          <p class="card-text">Author: {{ dataset.author }}</p>
+          {% if dataset.description %}
+          <p class="card-text">Description: {{ dataset.description }}</p>
+          {% else %}
+          <p class="card-text">Description: Not available.</p>
+          {% endif %}
+          {% if dataset.updated %}
+          <p class="card-text">Last Updated: {{ dataset.updated }}</p>
+          {% else %}
+          <p class="card-text">Last Updated: Information not available.</p>
+          {% endif %}
+          {% if dataset.time_period %}
+          <p class="card-text">Time Period Covered: {{ dataset.time_period }}</p>
+          {% else %}
+          <p class="card-text">Time Period Covered: Information not available.</p>
+          {% endif %}
+          {% if dataset.area_covered %}
+          <p class="card-text">Area Covered: {{ dataset.area_covered }}</p>
+          {% else %}
+          <p class="card-text">Area Covered: Information not available.</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not datasets %}
+      <div class="alert alert-warning">
+        No datasets found matching your search term. Please try a different search term.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.save-button').click(function(e) {
+        e.preventDefault();
+        var datasetId = $(this).data('dataset-id'); // Corrected attribute name
+        var datasetTitle = $(this).data('dataset-title'); // Corrected attribute name
+        var datasetLink = $(this).data('dataset-link');
+    
+        // Send a POST request to save the dataset
+        $.ajax({
+          url: '/save_dataset',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            dataset_id: datasetId,
+            dataset_name: datasetTitle, // Corrected variable name
+            dataset_link: datasetLink
+          }),
+          success: function(response) {
+            // Update the button text to indicate saved
+            $('.save-button[data-dataset-id="' + datasetId + '"]').text('Saved'); // Corrected attribute name
+          },
+          error: function(xhr, status, error) {
+            console.error('Error saving dataset:', error);
+          }
+        });
+      });
+    });
+  </script>
+{% endblock content %}

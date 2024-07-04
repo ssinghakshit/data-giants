@@ -1,0 +1,304 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-chart">
+                    <div class="card-header ">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h5 class="card-category">Total Datasets viewed</h5>
+                                <h2 class="card-title">Datasets</h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-primary btn-simple active" id="0">
+                                        <input type="radio" name="options" checked>
+                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Views</span>
+                                        <span class="d-block d-sm-none">
+                        <i class="tim-icons icon-single-02"></i>
+                                    </label>
+                                    <label class="btn btn-sm btn-primary btn-simple" id="2">
+                                        <input type="radio" class="d-none" name="options">
+                                        <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Sessions</span>
+                                        <span class="d-block d-sm-none">
+                        <i class="tim-icons icon-tap-02"></i>
+                    </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartBig1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card card-chart">
+                    <div class="card-header">
+                        <h5 class="card-category">Total Datasets </h5>
+                        <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 30,000</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartLinePurple"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-chart">
+                    <div class="card-header">
+                        <h5 class="card-category">Datasets per region</h5>
+                        <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 30</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="CountryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-chart">
+                    <div class="card-header">
+                        <h5 class="card-category">Completed Tasks</h5>
+                        <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartLineGreen"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card card-tasks">
+                    <div class="card-header ">
+                        <h6 class="title d-inline">Welcome, {{current_user.username}}</h3>
+                        <p class="card-category d-inline">Tasks for today</p>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">
+                                <i class="tim-icons icon-settings-gear-63"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                <button type="button" class="dropdown-item" id="addTaskBtn">Add Task</button>
+                                <button type="button" class="dropdown-item" id="removeTaskBtn">Remove Task</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-full-width table-responsive">
+                            <table class="table" id="taskTable">
+                                <tbody>
+                                    <!-- Tasks will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Modal for adding a task -->
+        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTaskModalLabel">Add Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addTaskForm">
+                            <div class="form-group">
+                                <label for="taskName">Task Name</label>
+                                <input type="text" class="form-control" id="taskName"required style="background-color: #f8f9fa; color: #212529;">
+                            </div>
+                            <div class="form-group">
+                                <label for="taskDescription">Task Description</label>
+                                <input type="text" class="form-control" id="taskDescription" style="background-color: #f8f9fa; color: #212529;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Task</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <h4 class="card-title">Top Dataset Sources</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table tablesorter " id="">
+                                <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Website
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Google Cloud Public Datasets
+                                    </td>
+                                    <td>
+                                        <a href='https://cloud.google.com/public-datasets'>https://cloud.google.com/public-datasets</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Amazon Web Services
+                                    </td>
+                                    <td>
+                                        <a href='https://registry.opendata.aws/'>https://registry.opendata.aws/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Data.gov
+                                    </td>
+                                    <td>
+                                        <a href='https://www.data.gov/'>https://www.data.gov/</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Kaggle
+                                    </td>
+                                    <td>
+                                        <a href='https://kaggle.com'>https://kaggle.com</a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        National Center for Environmental Information
+                                    </td>
+                                    <td>
+                                        <a href='https://www.noaa.gov/'>https://www.noaa.gov//</a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        UCI Machine Learning Repository
+                                    </td>
+                                    <td>
+                                        <a href='https://archive.ics.uci.edu'>https://archive.ics.uci.edu</a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Earthdata
+                                    </td>
+                                    <td>
+                                        <a href='https://earthdata.nasa.gov/'>https://earthdata.nasa.gov//a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const removeTaskBtn = document.getElementById('removeTaskBtn');
+        const taskTable = document.getElementById('taskTable');
+        const addTaskForm = document.getElementById('addTaskForm');
+    
+        // Add task functionality
+        addTaskBtn.addEventListener('click', function () {
+            $('#addTaskModal').modal('show');
+        });
+    
+        addTaskForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const taskName = document.getElementById('taskName').value;
+            const taskDescription = document.getElementById('taskDescription').value;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <p class="title">${taskName}</p>
+                    <p class="text-muted">${taskDescription}</p>
+                </td>
+                <td class="td-actions text-right">
+                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-link edit-task">
+                        <i class="tim-icons icon-pencil"></i>
+                    </button>
+                </td>
+            `;
+            taskTable.querySelector('tbody').appendChild(newRow);
+            $('#addTaskModal').modal('hide');
+        });
+    
+        // Remove task functionality
+        removeTaskBtn.addEventListener('click', function () {
+            const checkedBoxes = taskTable.querySelectorAll('input[type="checkbox"]:checked');
+            checkedBoxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                row.remove();
+            });
+        });
+    
+        // Mark task done functionality
+        taskTable.addEventListener('change', function (event) {
+            const checkbox = event.target;
+            if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+                const row = checkbox.closest('tr');
+                row.classList.toggle('task-done');
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+
+{% endblock javascripts %}

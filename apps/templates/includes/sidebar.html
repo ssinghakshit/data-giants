@@ -1,0 +1,53 @@
+
+    <div class="sidebar">
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="index.html" class="simple-text logo-mini">
+                    DG
+                </a>
+                <a href="index.html" class="simple-text logo-normal">
+                    DataGiants
+                </a>
+            </div>
+            <ul class="nav">
+                <li class="{% if 'index' in segment %} active {% endif %} ">
+                    <a href="/">
+                        <i class="tim-icons icon-chart-pie-36"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="{% if 'user' in segment %} active {% endif %}">
+                    <a href="/user.html">
+                        <i class="tim-icons icon-single-02"></i>
+                        <p>User Profile</p>
+                    </a>
+                </li>
+
+                <li class="{% if 'search' in segment %} active {% endif %}">
+                    <a href="search.html">
+                        <i class="tim-icons icon-send"></i>
+                        <p>Search Datasets</p>
+                    </a>
+                </li>
+
+                <li class="{% if 'notifications' in segment %} active {% endif %}">
+                    <a href="/notifications.html">
+                        <i class="tim-icons icon-bell-55"></i>
+                        <p>Notifications</p>
+                    </a>
+                </li> 
+                <li class="{% if 'pinned' in segment %} active {% endif %}">
+                    <a href="/pinned_datasets">
+                        <i class="tim-icons icon-pin"></i>
+                        <p>Pinned Datasets</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('authentication_blueprint.logout') }}">
+                        <i class="tim-icons icon-button-power"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %}
+{% block title %} Search Bar {% endblock %}
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<style>
+    h2{
+        color:black
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+        color: white;
+    }
+    .form-group {
+        margin-bottom: 0; 
+    }
+    .welcome-text {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 24px;
+    }
+    .flex-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 50px;
+    }
+    .flex-item {
+        text-align: center;
+        flex: 1;
+        padding: 20px;
+        border: 1px solid #dee2e6; /* Adjust border color as needed */
+        border-radius: 5px;
+    }
+    .flex-item h2 {
+        margin-bottom: 20px;
+    }
+    .search-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+    .search-container input[type=text] {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-container select {
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .search-container button {
+        background-color: #007bff;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .search-container button:hover {
+        background-color: #0056b3;
+    }
+</style>
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card ">
+          <div class="card-header">
+            <h4 class="card-title"> 
+                Search For Datasets
+            </h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+    <!-- Search Bar -->
+        <form action="/search" method="POST">
+            <input type="text" placeholder="Search for datasets" name="search">
+            <select name="topic" id="topicSelect">
+                <option value="">All Topics</option>
+                <option value="engineering">Engineering</option>
+                <option value="humanities">Humanities</option>
+                <option value="life-science">Life Science</option>
+                <option value="computing">Computing</option>
+                <option value="architecture">Architecture</option>
+                <option value="agriculture">Agriculture</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Flexbox -->
+    <div class="flex-container">
+        <!-- Flex Item 1 -->
+        <div class="flex-item">
+            <h2>Multiple data sources</h2>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            <span class="material-symbols-outlined">
+                width_wide
+                </span>
+        </div>
+        <!-- Flex Item 2 -->
+        <div class="flex-item">
+            <h2>Multiple Datasets</h2>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            <span class="material-symbols-outlined">
+                dataset_linked
+                </span>
+        </div>
+        <!-- Flex Item 3 -->
+        <div class="flex-item">
+            <h2>All a single search away</h2>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            <span class="material-symbols-outlined">
+                dataset
+                </span>
+        </div>
+    </div>
+
+<!-- Bootstrap JS (Optional - for dropdowns) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

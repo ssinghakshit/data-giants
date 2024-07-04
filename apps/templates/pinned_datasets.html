@@ -1,0 +1,96 @@
+<!-- templates/pinned_datasets.html -->
+
+{% extends "layouts/base.html" %}
+
+{% block title %} Pinned Datasets {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <h4 class="card-title"> Pinned Datasets</h4>
+                </div>
+                <div class="card-body">
+                  {% if datasets %}
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="pinned-datasets-table">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                        Dataset Name
+                                    </th>
+                                    <th>
+                                        Dataset Source
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dataset in datasets %}
+                                <tr id="dataset-{{ dataset.id }}">
+                                    <td>
+                                        {{ dataset.dataset_name }}
+                                    </td>
+                                    <td>
+                                        <a href={{ dataset.dataset_link }}>{{ dataset.dataset_link }}</a>
+                                    </td>
+                                    <!-- Add more table data cells if needed -->
+                                    <td class="text-center">
+                                        <button class="btn btn-danger remove-dataset-btn" data-dataset-id="{{ dataset.id }}">Remove</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                  {% else %}
+                    <p>No datasets have been saved.</p>
+                  {% endif %}  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to remove dataset buttons
+        document.querySelectorAll('.remove-dataset-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Get the dataset ID
+                const datasetId = this.getAttribute('data-dataset-id');
+                
+                // Send a POST request to remove the dataset
+                fetch('/remove_dataset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dataset_id: datasetId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the dataset row from the table
+                        const datasetRow = document.getElementById(`dataset-${datasetId}`);
+                        datasetRow.remove();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing dataset:', error);
+                });
+            });
+        });
+    });
+</script>
+{% endblock javascripts %}
